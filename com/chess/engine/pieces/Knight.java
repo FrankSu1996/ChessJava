@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Move.*;
 import com.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
 
@@ -21,7 +22,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
         List<Move> legalMoves = new ArrayList<>();
 
@@ -41,7 +42,7 @@ public class Knight extends Piece {
                 final Tile possibleDestinationTile = board.getTile(possibleDestinationCoordinate);
                 //if tile at destination is empty, add move into list of legal moves
                 if(!possibleDestinationTile.isTileOccupied()){
-                    legalMoves.add(new Move());
+                    legalMoves.add(new nonAttackMove(board, this, possibleDestinationCoordinate));
                 }
                 //if tile at destination occupied, get piece/alliance from that tile
                 else {
@@ -49,7 +50,7 @@ public class Knight extends Piece {
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                     //if alliances aren't same, add attacking move to list of legal moves
                     if(this.pieceAlliance != pieceAlliance){
-                        legalMoves.add(new Move());
+                        legalMoves.add(new AttackMove(board, this, possibleDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }

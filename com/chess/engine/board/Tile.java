@@ -30,7 +30,7 @@ public abstract class Tile {
 
 
 
-    private Tile(int tileCoordinate){
+    private Tile(final int tileCoordinate){
         this.tileCoordinate = tileCoordinate;
     }
 
