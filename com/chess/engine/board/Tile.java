@@ -33,6 +33,7 @@ public abstract class Tile {
     private Tile(int tileCoordinate){
         this.tileCoordinate = tileCoordinate;
     }
+
     //determines if tile is occupied or empty
     public abstract boolean isTileOccupied();
 
@@ -42,7 +43,7 @@ public abstract class Tile {
     //subclass for Empty tiles
     public static final class EmptyTile extends Tile{
 
-        public EmptyTile(final int coordinate){
+        private EmptyTile(final int coordinate){
             super(coordinate);
         }
 
@@ -66,7 +67,7 @@ public abstract class Tile {
         private final Piece pieceOnTile;
 
         //constructor takes coordinate AND piece
-        public OccupiedTile(int coordinate, Piece pieceOnTile){
+        private OccupiedTile(int coordinate, Piece pieceOnTile){
             super(coordinate);
             this.pieceOnTile = pieceOnTile;
         }
