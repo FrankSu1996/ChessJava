@@ -15,7 +15,7 @@ import static com.chess.engine.board.Move.*;
 
 public class Bishop extends Piece {
     //array of possible coordinates (offset values)
-    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -7, 7, 9 };
+    private final static int[] CANDIDATE_MOVE_COORDINATE = { -9, -7, 7, 9 };
 
     Bishop(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
@@ -28,7 +28,7 @@ public class Bishop extends Piece {
         //make an arraylist of legal moves
         final List<Move> legalMoves = new ArrayList<>();
         //loop through each coordinate, while each coordinate is a valid coordinate
-        for(final int candidateCoordinatesOffset: CANDIDATE_MOVE_VECTOR_COORDINATES){
+        for(final int candidateCoordinatesOffset: CANDIDATE_MOVE_COORDINATE){
             int candidateDestinationCoordinate = this.piecePosition;
             while(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)){
 

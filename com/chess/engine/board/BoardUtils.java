@@ -2,11 +2,15 @@ package com.chess.engine.board;
 
 public class BoardUtils {
 
-    //members determine if given position is in certain columns
+    //members determine if given position is in certain column
     public static final boolean[] FIRST_COLUMN = initializeColumn(0);
     public static final boolean[] SECOND_COLUMN = initializeColumn(1);
     public static final boolean[] SEVENTH_COLUMN = initializeColumn(6);
     public static final boolean[] EIGHTH_COLUMN = initializeColumn(7);
+
+    //members determine if given position is in certain row
+    public static final boolean[] SECOND_ROW = null;
+    public static final boolean[] SEVENTH_ROW = null;
 
     public static final int NUM_TILES = 64;
     public static final int TILES_PER_ROW = 8;
