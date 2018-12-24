@@ -17,7 +17,7 @@ public class Knight extends Piece {
     //possible legal moves offset (excluding out of bound tiles and occupied tiles)
     private final static int[] CANDIDATE_MOVE_COORDINATE = { -17, -15, -10, -6, 6, 10, 15, 17};
     //Constructor: Each knight has position and color(black/white)
-    Knight(final int piecePosition, final Alliance pieceAlliance) {
+    public Knight(final Alliance pieceAlliance, final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -56,6 +56,12 @@ public class Knight extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    //toString invokes toString from PieceType enum in Piece class
+    @Override
+    public String toString(){
+        return PieceType.KNIGHT.toString();
     }
 
     //method to capture first column exceptions

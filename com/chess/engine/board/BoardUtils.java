@@ -9,8 +9,8 @@ public class BoardUtils {
     public static final boolean[] EIGHTH_COLUMN = initializeColumn(7);
 
     //members determine if given position is in certain row
-    public static final boolean[] SECOND_ROW = null;
-    public static final boolean[] SEVENTH_ROW = null;
+    public static final boolean[] SECOND_ROW = initRow(8);
+    public static final boolean[] SEVENTH_ROW = initRow(48);
 
     public static final int NUM_TILES = 64;
     public static final int TILES_PER_ROW = 8;
@@ -29,6 +29,17 @@ public class BoardUtils {
         } while(columnNumber < NUM_TILES);
         return column;
     }
+
+    //method to initialize rows of the board
+    private static boolean[] initRow(int rowNumber){
+        final boolean[] row = new boolean[NUM_TILES];
+        do {
+            row[rowNumber] = true;
+            rowNumber++;
+        } while(rowNumber % 8 != 0);
+        return row;
+    }
+
 
     //method to determine if tile is valid (coordinate between 0 and 63)
     public static boolean isValidTileCoordinate(int coordinate) {

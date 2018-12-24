@@ -16,7 +16,7 @@ public class Rook extends Piece{
     //like Bishop class, Rook is also a "slider"
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -8, -1, 1, 8};
 
-    Rook(int piecePosition, Alliance pieceAlliance) {
+    public Rook(Alliance pieceAlliance, final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -56,6 +56,12 @@ public class Rook extends Piece{
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    //toString invokes toString from PieceType enum in Piece class
+    @Override
+    public String toString(){
+        return PieceType.ROOK.toString();
     }
 
     //methods to determine exclusions when Rook is on the side columns

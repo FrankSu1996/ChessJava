@@ -47,6 +47,12 @@ public abstract class Tile {
             super(coordinate);
         }
 
+        //toString for empty tile returns '-'
+        @Override
+        public String toString(){
+            return "-";
+        }
+
         //overwritten method: empty tiles are not occupied
         @Override
         public boolean isTileOccupied(){
@@ -72,6 +78,13 @@ public abstract class Tile {
             this.pieceOnTile = pieceOnTile;
         }
 
+        //toString for non-empty tile prints out piece on tile. Black prints in lower case
+        //white prints in upper case
+        @Override
+        public String toString(){
+            return getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() :
+                    getPiece().toString();
+        }
 
         //overwritten method: occupied tiles are occupied
         @Override

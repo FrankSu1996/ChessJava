@@ -17,7 +17,7 @@ public class Bishop extends Piece {
     //array of possible coordinates (offset values)
     private final static int[] CANDIDATE_MOVE_COORDINATE = { -9, -7, 7, 9 };
 
-    Bishop(int piecePosition, Alliance pieceAlliance) {
+    public Bishop(final Alliance pieceAlliance, final int piecePosition) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -58,6 +58,12 @@ public class Bishop extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    //toString invokes toString from PieceType enum in Piece class
+    @Override
+    public String toString(){
+        return PieceType.BISHOP.toString();
     }
 
     //methods to determine exclusions when bishop is on the side columns
