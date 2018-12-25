@@ -3,6 +3,7 @@ package com.chess.engine.board;
 import com.chess.engine.Alliance;
 import com.chess.engine.pieces.*;
 import com.chess.engine.player.BlackPlayer;
+import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
 
@@ -28,7 +29,13 @@ public class Board {
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
     }
 
+    public Player whitePlayer(){
+        return this.whitePlayer;
+    }
 
+    public Player blackPlayer(){
+        return this.blackPlayer;
+    }
 
     //toString method to print out board
     @Override

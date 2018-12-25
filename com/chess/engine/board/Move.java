@@ -16,6 +16,10 @@ public abstract class Move {
         this.destinationCoordinate = destinationCoordinate;
     }
 
+    public int getDestinationCoordinate(){
+        return this.destinationCoordinate;
+    }
+
     //class for non-attacking moves
     public static final class nonAttackMove extends Move {
 
