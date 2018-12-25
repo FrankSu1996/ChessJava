@@ -2,6 +2,8 @@ package com.chess.engine.board;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.pieces.*;
+import com.chess.engine.player.BlackPlayer;
+import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
 
 import java.util.*;
@@ -12,6 +14,9 @@ public class Board {
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
+    //board also keeps track of each player
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
 
     private Board(Builder builder){
         this.gameBoard = createGameBoard(builder);
@@ -19,7 +24,11 @@ public class Board {
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
     }
+
+
 
     //toString method to print out board
     @Override
@@ -33,6 +42,16 @@ public class Board {
             }
         }
         return builder.toString();
+    }
+
+    //method to return black pieces on board, for use in BlackPlayer class
+    public Collection<Piece> getBlackPieces(){
+        return this.blackPieces;
+    }
+
+    //method to return white pieces on board, for use in WhitePlayer class
+    public Collection<Piece> getWhitePieces(){
+        return this.whitePieces;
     }
 
     //method to calculate the legal moves determining on which pieces are in collection

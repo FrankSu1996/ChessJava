@@ -19,7 +19,7 @@ public class Pawn extends Piece {
 
 
     public Pawn(final Alliance pieceAlliance, final int piecePosition) {
-        super(piecePosition, pieceAlliance);
+        super(PieceType.PAWN, piecePosition, pieceAlliance);
     }
 
     //method to calculate all the legal moves
