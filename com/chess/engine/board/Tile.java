@@ -40,6 +40,10 @@ public abstract class Tile {
     //returns piece from occupied tile, or NULL from empty tile
     public abstract Piece getPiece();
 
+    public int getTileCoordinate(){
+        return this.tileCoordinate;
+    }
+
     //subclass for Empty tiles
     public static final class EmptyTile extends Tile{
 
