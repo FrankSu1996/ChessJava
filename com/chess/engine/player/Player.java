@@ -36,7 +36,7 @@ public abstract class Player {
     }
 
     //calculate valid attack moves based on current position and moves
-    private static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
+    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
         final List<Move> attackMoves = new ArrayList<>();
         //loop through moves, if destination is same as piece position, is valid attack move
         for (final Move move : moves) {
@@ -120,5 +120,5 @@ public abstract class Player {
     public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
-
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentsLegals);
 }

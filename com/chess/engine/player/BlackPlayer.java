@@ -3,9 +3,13 @@ package com.chess.engine.player;
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
+import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class BlackPlayer extends Player {
     //Constructor calls super so that second argument is PLAYER (this case black) moves
@@ -28,5 +32,40 @@ public class BlackPlayer extends Player {
     @Override
     public Player getOpponent() {
         return this.board.whitePlayer();
+    }
+
+    @Override
+    protected Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentsLegals) {
+        final List<Move> kingCastles = new ArrayList<>();
+        //for black player's kingside castle: if players king is in first move, and is NOT in check
+        if(this.playerKing.isFirstMove() && !this.isInCheck()){
+            //for kingside check: if 2 tiles to the right are NOT occupied
+            if(!this.board.getTile(5).isTileOccupied() &&
+                    !this.board.getTile(6).isTileOccupied()){
+                final Tile rookTile = this.board.getTile(7);
+                //must also check if rook to the right is occupied and is first move to be
+                //legal castling move
+                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()){
+                    if(Player.calculateAttacksOnTile(5, opponentsLegals).isEmpty() &&
+                            Player.calculateAttacksOnTile(6, opponentsLegals).isEmpty() &&
+                            rookTile.getPiece().getPieceType().isRook()) {
+                        kingCastles.add(null);
+                    }
+                }
+            }
+
+            //black players queenside castle move: same logic as above, but need to check 1 extra tile
+            if(!this.board.getTile(1).isTileOccupied() &&
+                    !this.board.getTile(2).isTileOccupied() &&
+                    !this.board.getTile(3).isTileOccupied()){
+
+                final Tile rookTile = this.board.getTile(0);
+                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()){
+                    //todo add castle move
+                    kingCastles.add(null);
+                }
+            }
+        }
+        return ImmutableList.copyOf(kingCastles);
     }
 }
