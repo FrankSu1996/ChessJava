@@ -10,8 +10,8 @@ import java.util.Collection;
 public class WhitePlayer extends Player {
     //Constructor calls super so that second argument is PLAYER (this case white) moves
     public WhitePlayer(Board board,
-                       Collection<Move> whiteStandardLegalMoves,
-                       Collection<Move> blackStandardLegalMoves) {
+                       final Collection<Move> whiteStandardLegalMoves,
+                       final Collection<Move> blackStandardLegalMoves) {
 
         super(board, whiteStandardLegalMoves, blackStandardLegalMoves);
 

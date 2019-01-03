@@ -58,6 +58,12 @@ public class Rook extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
+    //create new Rook with updated piece position
+    @Override
+    public Rook movePiece(final Move move) {
+        return new Rook(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
+
     //toString invokes toString from PieceType enum in Piece class
     @Override
     public String toString(){

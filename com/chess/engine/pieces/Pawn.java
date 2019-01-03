@@ -87,6 +87,13 @@ public class Pawn extends Piece {
         }
         return ImmutableList.copyOf(legalMoves);
     }
+
+    //create new Pawn with updated piece position
+    @Override
+    public Pawn movePiece(final Move move) {
+        return new Pawn(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
+
     //toString invokes toString from PieceType enum in Piece class
     @Override
     public String toString(){

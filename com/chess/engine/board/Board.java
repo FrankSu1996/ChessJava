@@ -6,6 +6,7 @@ import com.chess.engine.player.BlackPlayer;
 import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -18,15 +19,19 @@ public class Board {
     //board also keeps track of each player
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
+    private final Pawn enPassantPawn;
 
-    private Board(Builder builder){
+    private Board(final Builder builder){
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     public Player whitePlayer(){
@@ -35,6 +40,10 @@ public class Board {
 
     public Player blackPlayer(){
         return this.blackPlayer;
+    }
+
+    public Player currentPlayer(){
+        return this.currentPlayer;
     }
 
     //toString method to print out board
@@ -139,6 +148,11 @@ public class Board {
 
         return builder.build();
     }
+    //getter for all possible legal moves
+    public Iterable<Move> getAllLegalMoves() {
+        //concatenate both white player and black players' legal moves
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    }
 
     //builder class for board
     public static class Builder{
@@ -146,6 +160,7 @@ public class Board {
         Map<Integer, Piece> boardConfig;
         //Which color player is making the move
         Alliance nextMoveMaker;
+        private Pawn enPassantPawn;
 
         public Builder(){
             this.boardConfig = new HashMap<>();
@@ -166,6 +181,9 @@ public class Board {
             return new Board(this);
         }
 
+        public void setEnpassantPawn(Pawn enpassantPawn) {
+            this.enPassantPawn = enpassantPawn;
+        }
     }
 
 

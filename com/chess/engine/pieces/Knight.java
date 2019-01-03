@@ -58,6 +58,12 @@ public class Knight extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    //create new Knight with updated piece position
+    @Override
+    public Knight movePiece(final Move move) {
+        return new Knight(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
+
     //toString invokes toString from PieceType enum in Piece class
     @Override
     public String toString(){

@@ -60,6 +60,12 @@ public class Bishop extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    //create new bishop with updated piece position
+    @Override
+    public Bishop movePiece(final Move move) {
+        return new Bishop(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
+
     //toString invokes toString from PieceType enum in Piece class
     @Override
     public String toString(){

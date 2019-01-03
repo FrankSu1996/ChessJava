@@ -18,6 +18,14 @@ public abstract class Player {
     protected final Collection<Move> legalMoves;
     private final boolean isInCheck;
 
+    //getter for player's king
+    public King getPlayerKing(){
+        return this.playerKing;
+    }
+    //getter for move collection
+    public Collection<Move> getLegalMoves(){
+        return this.legalMoves;
+    }
     //Constructor has board, then PLAYERS legal moves, then OPPONENTS legal moves, subclasses
     //constructor will be based on their color
     Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves){
@@ -86,7 +94,25 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(final Move move){
-        return null;
+        //if move isn't legal, don't need to transition to new board
+        if (!isMoveLegal(move)){
+            return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        }
+        //else new board is made (since we defined board as immutable), and move is executed
+        //NOTE: this now switches current player!!
+        final Board transitionBoard = move.execute();
+
+        //calculates if opponent (now current player after previous move execution) has legal move on king
+        final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(),
+                transitionBoard.currentPlayer().getLegalMoves());
+
+        //if there is a valid move on king, cannot execute move b/c leaves player in check
+        //thus return same board instead of returning transition board
+        if(!kingAttacks.isEmpty()){
+            return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+        }
+        //if no valid king attacks, move is valid so return transition board
+        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
 

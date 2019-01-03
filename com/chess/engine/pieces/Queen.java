@@ -58,6 +58,12 @@ public class Queen extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
+    //create new Queen with updated piece position
+    @Override
+    public Queen movePiece(final Move move) {
+        return new Queen(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    }
+
     //toString invokes toString from PieceType enum in Piece class
     @Override
     public String toString(){
