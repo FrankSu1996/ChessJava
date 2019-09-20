@@ -20,7 +20,7 @@ public class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
-    private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(1000, 650);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
@@ -99,7 +99,11 @@ public class Table {
             super (new GridBagLayout());
             this.tileId = tileId;
             setPreferredSize(TILE_PANEL_DIMENSION);
-            assignTileColor();
+            try {
+                assignTileColor();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             validate();
         }
 
