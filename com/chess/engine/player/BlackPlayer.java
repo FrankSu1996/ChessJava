@@ -49,7 +49,10 @@ public class BlackPlayer extends Player {
                 final Tile rookTile = this.board.getTile(7);
                 //must also check if rook to the right is occupied and is first move to be
                 //legal castling move
-                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()){
+                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove() &&
+                    Player.calculateAttacksOnTile(2, opponentsLegals).isEmpty() &&
+                    Player.calculateAttacksOnTile(3, opponentsLegals).isEmpty() &&
+                    rookTile.getPiece().getPieceType().isRook()){
                     if(Player.calculateAttacksOnTile(5, opponentsLegals).isEmpty() &&
                             Player.calculateAttacksOnTile(6, opponentsLegals).isEmpty() &&
                             rookTile.getPiece().getPieceType().isRook()) {
