@@ -20,9 +20,11 @@ public class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+    private final Board chessBoard;
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(1000, 650);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
+    private static String defaultPieceImagesPath = "art/pieces/plain/";
 
     //colors for tiles
     private final Color lightTileColor = Color.decode("#FFFACD");
@@ -31,6 +33,7 @@ public class Table {
     public Table(){
         this.gameFrame = new JFrame("JavaChess");
         this.gameFrame.setLayout(new BorderLayout());
+        this.chessBoard = Board.createStandardBoard();
         //creating menu bar
         final JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
@@ -99,11 +102,8 @@ public class Table {
             super (new GridBagLayout());
             this.tileId = tileId;
             setPreferredSize(TILE_PANEL_DIMENSION);
-            try {
-                assignTileColor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            assignTileColor();
+            assignTilePieceIcon(chessBoard);
             validate();
         }
 
@@ -114,10 +114,9 @@ public class Table {
 
             //if tile has tile on it, must place image on it
             if (board.getTile(this.tileId).isTileOccupied()) {
-                String pieceIconPath = "";
                 try {
                     // example: WHITE, bishop = "WB.gif"
-                    final BufferedImage image = read(new File(pieceIconPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0, 1) +
+                    final BufferedImage image = read(new File(defaultPieceImagesPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0, 1) +
                             board.getTile(this.tileId).getPiece().toString() + ".gif"));
                     add (new JLabel(new ImageIcon(image)));
                 } catch (IOException e)
@@ -127,7 +126,7 @@ public class Table {
             }
         }
 
-        private void assignTileColor() throws IOException {
+        private void assignTileColor() {
             //if tile is in these rows, if tile id even make it light color
             if (BoardUtils.EIGHTH_RANK[this.tileId] ||
                 BoardUtils.SIXTH_RANK[this.tileId] ||
