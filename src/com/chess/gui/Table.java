@@ -19,6 +19,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static javax.imageio.ImageIO.read;
@@ -35,6 +37,8 @@ public class Table {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
+
+    private boolean highlightLegalMoves;
 
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(1000, 650);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
@@ -55,6 +59,7 @@ public class Table {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.boardPanel = new BoardPanel();
         this.boardDirection = BoardDirection.NORMAL;
+        this.highlightLegalMoves = false;
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.gameFrame.setVisible(true);
     }
@@ -106,6 +111,17 @@ public class Table {
             }
         });
         preferencesMenu.add(flipBoardMenuItem);
+        preferencesMenu.addSeparator();
+
+        final JCheckBoxMenuItem legalMoveHighLighterCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", false);
+        legalMoveHighLighterCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                highlightLegalMoves = legalMoveHighLighterCheckbox.isSelected();
+            }
+        });
+
+        preferencesMenu.add(legalMoveHighLighterCheckbox);
         return preferencesMenu;
     }
 
@@ -249,6 +265,7 @@ public class Table {
         public void drawTile(final Board board) {
             assignTileColor();
             assignTilePieceIcon(board);
+            highlightLegalMoves(board);
             validate();
             repaint();
         }
@@ -270,6 +287,29 @@ public class Table {
                     e.printStackTrace();
                 }
             }
+        }
+
+        //method to highlight current legal moves
+        private void highlightLegalMoves(final Board board) {
+            if(highlightLegalMoves) {
+                //iterate through possible moves of given piece
+                for (final Move move : pieceLegalMoves(board)) {
+                    if(move.getDestinationCoordinate() == this.tileId) {
+                        try {
+                            add(new JLabel(new ImageIcon(ImageIO.read(new File("art/misc/green_dot.png")))));
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        private Collection<Move> pieceLegalMoves(final Board board) {
+            if (humanMovedPiece != null && humanMovedPiece.getPieceAlliance() == board.currentPlayer().getAlliance()) {
+                return humanMovedPiece.calculateLegalMoves(board);
+            }
+            return Collections.emptyList();
         }
 
         private void assignTileColor() {
