@@ -16,8 +16,14 @@ public class Queen extends Piece{
     //array of possible coordinates (offset values) for queen is bishop and rook combined
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
+    //"convenience constructor", dummy true value for first move
     public Queen(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.QUEEN, piecePosition, pieceAlliance);
+        super(PieceType.QUEEN, piecePosition, pieceAlliance, true);
+    }
+
+    //constructor that takes in actual isFirstMove argument
+    public Queen(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.QUEEN, piecePosition, pieceAlliance, isFirstMove);
     }
 
     //method to calculate possible moves

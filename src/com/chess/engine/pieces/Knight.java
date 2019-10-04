@@ -16,9 +16,15 @@ public class Knight extends Piece {
 
     //possible legal moves offset (excluding out of bound tiles and occupied tiles)
     private final static int[] CANDIDATE_MOVE_COORDINATE = { -17, -15, -10, -6, 6, 10, 15, 17};
+
     //Constructor: Each knight has position and color(black/white)
     public Knight(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.KNIGHT, piecePosition, pieceAlliance);
+        super(PieceType.KNIGHT, piecePosition, pieceAlliance, true);
+    }
+
+    //constructor that takes in actual isFirstMove argument
+    public Knight(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.KNIGHT, piecePosition, pieceAlliance, isFirstMove);
     }
 
     @Override

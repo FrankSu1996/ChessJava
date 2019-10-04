@@ -16,8 +16,14 @@ public class Rook extends Piece{
     //like Bishop class, Rook is also a "slider"
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -8, -1, 1, 8};
 
+    //"convenience constructor", dummy true value for first move
     public Rook(Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.ROOK, piecePosition, pieceAlliance);
+        super(PieceType.ROOK, piecePosition, pieceAlliance, true);
+    }
+
+    //constructor that takes in actual isFirstMove argument
+    public Rook(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.ROOK, piecePosition, pieceAlliance, isFirstMove);
     }
 
     //method to calculate possible moves

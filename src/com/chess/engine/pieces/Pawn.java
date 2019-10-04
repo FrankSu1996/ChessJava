@@ -17,9 +17,14 @@ public class Pawn extends Piece {
     //list of possible offsets
     private final static int[] CANDIDATE_MOVE_COORDINATE = {7, 8, 9, 16};
 
-
+    //"convenience constructor", dummy true value for first move
     public Pawn(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.PAWN, piecePosition, pieceAlliance);
+        super(PieceType.PAWN, piecePosition, pieceAlliance, true);
+    }
+
+    //constructor that takes in actual isFirstMove argument
+    public Pawn(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.PAWN, piecePosition, pieceAlliance, isFirstMove);
     }
 
     //method to calculate all the legal moves

@@ -17,10 +17,15 @@ public class Bishop extends Piece {
     //array of possible coordinates (offset values)
     private final static int[] CANDIDATE_MOVE_COORDINATE = { -9, -7, 7, 9 };
 
+    //"convenience constructor", dummy true value for first move
     public Bishop(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.BISHOP, piecePosition, pieceAlliance);
+        super(PieceType.BISHOP, piecePosition, pieceAlliance, true);
     }
 
+    //constructor that takes in actual isFirstMove argument
+    public Bishop(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+        super(PieceType.BISHOP, piecePosition, pieceAlliance, true);
+    }
 
     //method to calculate possible moves
     @Override
