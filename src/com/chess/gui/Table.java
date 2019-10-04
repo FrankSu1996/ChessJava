@@ -30,6 +30,8 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 public class Table {
 
     private final JFrame gameFrame;
+    private final JPanel gameHistoryPanel;
+    private final JPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
     private Board chessBoard;
 
@@ -53,6 +55,9 @@ public class Table {
         this.gameFrame = new JFrame("JavaChess");
         this.gameFrame.setLayout(new BorderLayout());
         this.chessBoard = Board.createStandardBoard();
+        this.gameHistoryPanel = new GameHistoryPanel();
+        this.takenPiecesPanel = new TakenPiecesPanel();
+
         //creating menu bar
         final JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
@@ -60,7 +65,11 @@ public class Table {
         this.boardPanel = new BoardPanel();
         this.boardDirection = BoardDirection.NORMAL;
         this.highlightLegalMoves = false;
+
+        //add board and side panels to main frame
+        this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
         this.gameFrame.setVisible(true);
     }
 
