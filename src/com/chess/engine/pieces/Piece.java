@@ -77,6 +77,9 @@ public abstract class Piece {
         return this.pieceType;
     }
 
+    public int getPieceValue() {
+        return this.pieceType.getPieceValue();
+    }
 
     //abstract method to calculate legal moves: legal moves DEPEND on the piece
     public abstract Collection<Move> calculateLegalMoves(final Board board);
