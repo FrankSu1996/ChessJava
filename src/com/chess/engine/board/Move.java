@@ -146,10 +146,6 @@ public abstract class Move {
         }
 
         //when move is executed, return NEW board
-        @Override
-        public Board execute() {
-            return null;
-        }
 
         @Override
         public boolean isAttack(){
@@ -159,7 +155,6 @@ public abstract class Move {
         public Piece getAttackedPiece(){
             return this.attackedPiece;
         }
-
     }
 
     //class for non attacking pawn move
@@ -175,6 +170,17 @@ public abstract class Move {
 
         public PawnAttackMove(final Board board, final Piece movedPiece, final int destinationCoordinate, final Piece attackedPiece) {
             super(board, movedPiece, destinationCoordinate, attackedPiece);
+        }
+
+        @Override
+        public boolean equals(final Object other) {
+            return this == other || other instanceof PawnAttackMove && super.equals(other);
+        }
+
+        @Override
+        public String toString() {
+            return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()).substring(0, 1) + "x" +
+                    BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
     }
 
@@ -210,6 +216,11 @@ public abstract class Move {
             builder.setEnPassantMove(movedPawn);
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             return builder.build();
+        }
+
+        @Override
+        public String toString() {
+            return BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
     }
 
@@ -303,6 +314,10 @@ public abstract class Move {
         @Override
         public String toString(){
             return "O-O-O";
+        }
+        @Override
+        public int getCurrentCoordinate() {
+            return -1;
         }
     }
 

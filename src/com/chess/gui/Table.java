@@ -30,9 +30,10 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 public class Table {
 
     private final JFrame gameFrame;
-    private final JPanel gameHistoryPanel;
-    private final JPanel takenPiecesPanel;
+    private final GameHistoryPanel gameHistoryPanel;
+    private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
+    private final MoveLog moveLog;
     private Board chessBoard;
 
     private Tile sourceTile;
@@ -57,6 +58,7 @@ public class Table {
         this.chessBoard = Board.createStandardBoard();
         this.gameHistoryPanel = new GameHistoryPanel();
         this.takenPiecesPanel = new TakenPiecesPanel();
+        this.moveLog = new MoveLog();
 
         //creating menu bar
         final JMenuBar tableMenuBar = createTableMenuBar();
@@ -265,9 +267,10 @@ public class Table {
                             destinationTile = chessBoard.getTile(tileId);
                             final Move move = Move.MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(), destinationTile.getTileCoordinate());
                             final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+                            // must update move log and new transition board
                             if (transition.getMoveStatus().isDone()) {
                                 chessBoard = transition.getTransitionBoard();
-                                //TODO add the move that was made to move log
+                                moveLog.addMove(move);
                             }
                             sourceTile = null;
                             destinationTile = null;
@@ -277,6 +280,8 @@ public class Table {
                             @Override
                             public void run() {
                                 boardPanel.drawBoard(chessBoard);
+                                gameHistoryPanel.redo(chessBoard, moveLog);
+                                takenPiecesPanel.redo(moveLog);
                             }
                         });
                     }
