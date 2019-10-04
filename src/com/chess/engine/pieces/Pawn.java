@@ -57,7 +57,7 @@ public class Pawn extends Piece {
                 //if the tile behind destination AND destination isn't occupied, add new non attacking "jump" move
                 if(!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()){
-                        legalMoves.add(new nonAttackMove(board, this, candidateDestinationCoordinate));
+                        legalMoves.add(new PawnJump(board, this, candidateDestinationCoordinate));
 
                 }
             }
@@ -71,7 +71,7 @@ public class Pawn extends Piece {
                     //if alliances between pieces don't match, add attacking move
                     if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()){
                         //TODO more to do here
-                        legalMoves.add(new nonAttackMove(board, this, candidateDestinationCoordinate));
+                        legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
                 }
             }
@@ -85,7 +85,7 @@ public class Pawn extends Piece {
                     //if alliances between pieces don't match, add attacking move
                     if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()){
                         //TODO more to do here
-                        legalMoves.add(new nonAttackMove(board, this, candidateDestinationCoordinate));
+                        legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
                 }
             }
