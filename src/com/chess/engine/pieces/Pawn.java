@@ -45,10 +45,15 @@ public class Pawn extends Piece {
 
             //if tile is isn't occupied, add non-attacking move (1 square up/down)
             if(currentCandidateOffset == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
-                //todo more work to do here (deal with promotions)!!!!!
-                legalMoves.add(new PawnMove(board, this, candidateDestinationCoordinate));
+                //check if destination is pawn promotion tile
+                if(this.pieceAlliance.isPawnPromotionSquare(candidateDestinationCoordinate)) {
+                    legalMoves.add(new PawnPromotion(new PawnMove(board, this, candidateDestinationCoordinate)));
+                }
+                else {
+                    legalMoves.add(new PawnMove(board, this, candidateDestinationCoordinate));
+                }
             }
-            //pawn "jump" move: 2 squares at first move of game
+            //pawn "jump" move: 2 squares at first move of game. Don't need to check for pawn promotion
             else if (currentCandidateOffset == 16 && this.isFirstMove() &&
                     ((BoardUtils.SEVENTH_RANK[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
                     (BoardUtils.SECOND_RANK[this.piecePosition] && this.getPieceAlliance().isWhite()))) {
@@ -69,8 +74,13 @@ public class Pawn extends Piece {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     //if alliances between pieces don't match, add attacking move
                     if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()){
-                        //TODO more to do here
-                        legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        //check for possible pawn promotion tile
+                        if(this.pieceAlliance.isPawnPromotionSquare(candidateDestinationCoordinate)) {
+                            legalMoves.add(new PawnPromotion(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate)));
+                        }
+                        else {
+                            legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        }
                     }
                 } else if(board.getEnPassantPawn() != null) {
                     if(board.getEnPassantPawn().getPiecePosition() == (this.getPiecePosition() + this.pieceAlliance.getOppositeDirection())) {
@@ -90,8 +100,13 @@ public class Pawn extends Piece {
                     final Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     //if alliances between pieces don't match, add attacking move
                     if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()){
-                        //TODO more to do here
-                        legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        // check for possible pawn promotion tile
+                        if(this.pieceAlliance.isPawnPromotionSquare(candidateDestinationCoordinate)) {
+                            legalMoves.add(new PawnPromotion(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate)));
+                        }
+                        else {
+                            legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        }
                     }
                 } else if(board.getEnPassantPawn() != null) {
                     if(board.getEnPassantPawn().getPiecePosition() == (this.getPiecePosition() - this.pieceAlliance.getOppositeDirection())) {
@@ -116,5 +131,10 @@ public class Pawn extends Piece {
     @Override
     public String toString(){
         return PieceType.PAWN.toString();
+    }
+
+    //for simplicity, will always promote to queen. VERY uncommon in real games
+    public Piece getPromotionPiece() {
+        return new Queen(this.pieceAlliance, this.piecePosition, false);
     }
 }
