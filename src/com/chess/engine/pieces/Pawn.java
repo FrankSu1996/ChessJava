@@ -46,7 +46,7 @@ public class Pawn extends Piece {
             //if tile is isn't occupied, add non-attacking move (1 square up/down)
             if(currentCandidateOffset == 8 && !board.getTile(candidateDestinationCoordinate).isTileOccupied()) {
                 //todo more work to do here (deal with promotions)!!!!!
-                legalMoves.add(new nonAttackMove(board, this, candidateDestinationCoordinate));
+                legalMoves.add(new PawnMove(board, this, candidateDestinationCoordinate));
             }
             //pawn "jump" move: 2 squares at first move of game
             else if (currentCandidateOffset == 16 && this.isFirstMove() &&
@@ -58,7 +58,6 @@ public class Pawn extends Piece {
                 if(!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()){
                         legalMoves.add(new PawnJump(board, this, candidateDestinationCoordinate));
-
                 }
             }
             //attacking move: condition when offset is 7 and doesn't fall into exclusion columns
@@ -73,6 +72,13 @@ public class Pawn extends Piece {
                         //TODO more to do here
                         legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
+                } else if(board.getEnPassantPawn() != null) {
+                    if(board.getEnPassantPawn().getPiecePosition() == (this.getPiecePosition() + this.pieceAlliance.getOppositeDirection())) {
+                        final Piece pieceOnCandidate = board.getEnPassantPawn();
+                        if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                            legalMoves.add(new PawnEnPassantAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        }
+                    }
                 }
             }
             //attacking move: condition when offset is 9 and doesn't fall into exclusion columns
@@ -86,6 +92,13 @@ public class Pawn extends Piece {
                     if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()){
                         //TODO more to do here
                         legalMoves.add(new PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                    }
+                } else if(board.getEnPassantPawn() != null) {
+                    if(board.getEnPassantPawn().getPiecePosition() == (this.getPiecePosition() - this.pieceAlliance.getOppositeDirection())) {
+                        final Piece pieceOnCandidate = board.getEnPassantPawn();
+                        if (this.pieceAlliance != pieceOnCandidate.getPieceAlliance()) {
+                            legalMoves.add(new PawnEnPassantAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
+                        }
                     }
                 }
             }

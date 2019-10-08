@@ -1,5 +1,4 @@
 package com.chess.engine.pieces;
-
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
@@ -54,7 +53,7 @@ public class Queen extends Piece{
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         //if alliances aren't same, add attacking move to list of legal moves
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new Move.MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
                     }
