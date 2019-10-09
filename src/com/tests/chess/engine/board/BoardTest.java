@@ -48,7 +48,7 @@ class BoardTest {
         assertTrue(t3.getMoveStatus().isDone());
 
         // create Minimax ai and make "best move"
-        final MoveStrategy strategy = new MiniMax(10);
+        final MoveStrategy strategy = new MiniMax(4);
         final Move aiMove = strategy.execute(t3.getTransitionBoard());
 
         // "manually" create the best move: should be a checkmate

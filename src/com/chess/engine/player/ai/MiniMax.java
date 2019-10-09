@@ -29,6 +29,8 @@ public class MiniMax implements MoveStrategy {
 
         int highestValue = Integer.MIN_VALUE;
         int lowestValue = Integer.MAX_VALUE;
+        final int alpha = Integer.MIN_VALUE;
+        final int beta = Integer.MAX_VALUE;
         int currentValue;
 
         System.out.println(board.currentPlayer() + " is calculating best move with depth = " + this.searchDepth);
@@ -42,8 +44,8 @@ public class MiniMax implements MoveStrategy {
                 /*check alliance of next moves player. Use max/min functions accordingly
                 NOTE: White by convention is maximizing player, Black is minimizing.*/
                 currentValue = board.currentPlayer().getAlliance().isWhite() ?
-                        min(moveTransition.getTransitionBoard(), this.searchDepth - 1) :
-                        max(moveTransition.getTransitionBoard(), this.searchDepth - 1);
+                        min(moveTransition.getTransitionBoard(), this.searchDepth - 1, alpha, beta) :
+                        max(moveTransition.getTransitionBoard(), this.searchDepth - 1, alpha, beta);
 
                 // if current player is white, return highest value
                 if(board.currentPlayer().getAlliance().isWhite() && currentValue >= highestValue) {
@@ -63,7 +65,7 @@ public class MiniMax implements MoveStrategy {
     }
 
     //helper minimizing function
-    public int min(final Board board, final int depth) {
+    public int min(final Board board, final int depth, int alpha, int beta) {
         //base case when depth is 0
         if(depth == 0 || isEndGameScenario(board)) {
             return this.boardEvaluator.evaluate(board, depth);
@@ -77,10 +79,12 @@ public class MiniMax implements MoveStrategy {
         for(final Move move : board.currentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if(moveTransition.getMoveStatus().isDone()) {
-                final int currentValue = max(moveTransition.getTransitionBoard(), depth - 1);
-                if (currentValue <= lowest) {
-                    lowest = currentValue;
-                }
+                final int currentValue = max(moveTransition.getTransitionBoard(), depth - 1, alpha, beta);
+                lowest = Math.min(lowest, currentValue);
+                beta = Math.min(beta, currentValue);
+
+                // Alpha Beta Pruning
+                if (beta <= alpha) break;
             }
         }
 
@@ -88,7 +92,7 @@ public class MiniMax implements MoveStrategy {
     }
 
     //helper maximizing function
-    public int max(final Board board, final int depth) {
+    public int max(final Board board, final int depth, int alpha, int beta) {
         //base case when depth is 0
         if(depth == 0 || isEndGameScenario(board)) {
             return this.boardEvaluator.evaluate(board, depth);
@@ -102,10 +106,12 @@ public class MiniMax implements MoveStrategy {
         for(final Move move : board.currentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if(moveTransition.getMoveStatus().isDone()) {
-                final int currentValue = min(moveTransition.getTransitionBoard(), depth - 1);
-                if (currentValue >= highest) {
-                    highest = currentValue;
-                }
+                final int currentValue = min(moveTransition.getTransitionBoard(),depth - 1, alpha, beta);
+                highest = Math.max(highest, currentValue);
+                alpha = Math.max(alpha, currentValue);
+
+                // Alpha beta pruning
+                if (beta <= alpha) break;
             }
         }
 
