@@ -20,7 +20,43 @@ public class MiniMax implements MoveStrategy {
     //calculates best move given a depth using minimax algorithm
     @Override
     public Move execute(Board board, int depth) {
-        return null;
+
+        //record how long it takes to make decision
+        final long startTime = System.currentTimeMillis();
+        Move bestMove = null;
+
+        int highestValue = Integer.MIN_VALUE;
+        int lowestValue = Integer.MAX_VALUE;
+        int currentValue;
+
+        System.out.println(board.currentPlayer() + " is calculating best move with depth = " + depth);
+        int numMoves = board.currentPlayer().getLegalMoves().size();
+
+        for (final Move move : board.currentPlayer().getLegalMoves()) {
+
+            //first execute a move
+            final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
+            if(moveTransition.getMoveStatus().isDone()) {
+                /*check alliance of next moves player. Use max/min functions accordingly
+                NOTE: White by convention is maximizing player, Black is minimizing.*/
+                currentValue = board.currentPlayer().getAlliance().isWhite() ?
+                        min(moveTransition.getTransitionBoard(), depth - 1) :
+                        max(moveTransition.getTransitionBoard(), depth - 1);
+
+                // if current player is white, return highest value
+                if(board.currentPlayer().getAlliance().isWhite() && currentValue >= highestValue) {
+                    highestValue = currentValue;
+                    bestMove = move;
+                }
+                // if current player is black, return lowest value
+                else if (board.currentPlayer().getAlliance().isBlack() && currentValue <= lowestValue) {
+                    lowestValue = currentValue;
+                    bestMove = move;
+                }
+            }
+        }
+        final long executionTime = System.currentTimeMillis() - startTime;
+        return bestMove;
     }
 
     //helper minimizing function
