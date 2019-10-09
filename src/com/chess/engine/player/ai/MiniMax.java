@@ -9,7 +9,7 @@ public class MiniMax implements MoveStrategy {
     private final BoardEvaluator boardEvaluator;
 
     public MiniMax() {
-        this.boardEvaluator = null;
+        this.boardEvaluator = new StandardBoardEvaluator();
     }
 
     @Override
@@ -56,6 +56,7 @@ public class MiniMax implements MoveStrategy {
             }
         }
         final long executionTime = System.currentTimeMillis() - startTime;
+        System.out.println("Best move calculated in " + executionTime + " seconds");
         return bestMove;
     }
 
