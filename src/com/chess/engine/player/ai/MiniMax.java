@@ -58,7 +58,7 @@ public class MiniMax implements MoveStrategy {
             }
         }
         final long executionTime = System.currentTimeMillis() - startTime;
-        System.out.println("Best move calculated in " + executionTime + " seconds");
+        System.out.println("Best move calculated in " + (double)executionTime/1000 + " seconds");
         return bestMove;
     }
 
