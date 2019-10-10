@@ -62,6 +62,9 @@ public class Table extends Observable {
         this.gameHistoryPanel = new GameHistoryPanel();
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.moveLog = new MoveLog();
+
+        //IMPORTANT: add AI as observer for the table
+        this.addObserver(new TableGameAIWatcher());
         this.gameSetup = new GameSetup(this.gameFrame, true);
 
         //creating menu bar
@@ -275,7 +278,8 @@ public class Table extends Observable {
     }
 
     private void moveMadeUpdate(final PlayerType playerType) {
-
+        setChanged();
+        notifyObservers(playerType);
     }
 
     // use swingworker to perform AI tasks in background thread so main GUI is still responsive
