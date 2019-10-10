@@ -44,8 +44,8 @@ public class BlackPlayer extends Player {
         //for black player's kingside castle: if players king is in first move, and is NOT in check
         if(this.playerKing.isFirstMove() && !this.isInCheck()){
             //for kingside check: if 2 tiles to the right are NOT occupied
-            if(!this.board.getTile(5).isTileOccupied() &&
-                    !this.board.getTile(6).isTileOccupied()){
+            if(!this.board.getTile(5).isTileOccupied() && !this.board.getTile(6).isTileOccupied()){
+
                 final Tile rookTile = this.board.getTile(7);
                 //must also check if rook to the right is occupied and is first move to be
                 //legal castling move

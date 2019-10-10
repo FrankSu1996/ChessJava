@@ -1,11 +1,13 @@
 package com.chess.gui;
 
+import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
 import com.chess.engine.player.MoveTransition;
+import com.chess.engine.player.WhitePlayer;
 import com.chess.engine.player.ai.MiniMax;
 import com.chess.engine.player.ai.MoveStrategy;
 import com.google.common.collect.Lists;
@@ -14,10 +16,7 @@ import com.google.common.collect.Lists;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -172,6 +171,16 @@ public class Table extends Observable {
 
         final JMenu optionsMenu = new JMenu("Options");
 
+        final JMenuItem resetMenuItem = new JMenuItem("New Game", KeyEvent.VK_P);
+        resetMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                undoAllMoves();
+            }
+
+        });
+        optionsMenu.add(resetMenuItem);
+
         final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
         setupGameMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -202,13 +211,12 @@ public class Table extends Observable {
                 final AIThinkTank thinkTank = new AIThinkTank();
                 thinkTank.execute();
             }
-            //pop-up dialog if current player is in checkmate
             if (Table.get().getGameBoard().currentPlayer().isInCheckMate()) {
                 JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
                         "Game Over: Player " + Table.get().getGameBoard().currentPlayer() + " is in checkmate!", "Game Over",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-            //pop-up dialog if current player is in stalemate
+
             if (Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
                 JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
                         "Game Over: Player " + Table.get().getGameBoard().currentPlayer() + " is in stalemate!", "Game Over",
@@ -265,6 +273,18 @@ public class Table extends Observable {
         this.computerMove = move;
     }
 
+    private void undoAllMoves() {
+        for(int i = Table.get().getMoveLog().size() - 1; i >= 0; i--) {
+            final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
+            this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
+        }
+        this.computerMove = null;
+        Table.get().getMoveLog().clear();
+        Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
+        Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
+        Table.get().getBoardPanel().drawBoard(chessBoard);
+    }
+
     private MoveLog getMoveLog() {
         return this.moveLog;
     }
@@ -304,7 +324,7 @@ public class Table extends Observable {
 
                 //updating gui components
                 Table.get().updateComputerMove(bestMove);
-                Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getTransitionBoard());
+                Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getToBoard());
                 Table.get().getMoveLog().addMove(bestMove);
                 Table.get().getGameHistoryPanel().redo(Table.get().getGameBoard(), Table.get().getMoveLog());
                 Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
@@ -421,7 +441,7 @@ public class Table extends Observable {
                             final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
                             // must update move log and new transition board
                             if (transition.getMoveStatus().isDone()) {
-                                chessBoard = transition.getTransitionBoard();
+                                chessBoard = transition.getToBoard();
                                 moveLog.addMove(move);
                             }
                             sourceTile = null;
@@ -439,6 +459,18 @@ public class Table extends Observable {
                                     Table.get().moveMadeUpdate(PlayerType.HUMAN);
                                 }
                                 boardPanel.drawBoard(chessBoard);
+                                if (chessBoard.currentPlayer().isInCheckMate()) {
+                                    if (chessBoard.currentPlayer().getAlliance() == Alliance.WHITE) {
+                                        JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
+                                                "Game Over: White Player is in Checkmate!!", "Game Over",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                    else if (chessBoard.currentPlayer().getAlliance() == Alliance.BLACK) {
+                                        JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
+                                                "Game Over: Black Player is in Checkmate!!", "Game Over",
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
                             }
                         });
                     }

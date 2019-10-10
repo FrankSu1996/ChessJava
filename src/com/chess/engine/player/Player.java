@@ -69,10 +69,12 @@ public abstract class Player {
     public boolean isInCheck(){
         return this.isInCheck;
     }
+
     //player is in checkmate if he/she is in check and has no escape moves
     public boolean isInCheckMate(){
         return this.isInCheck && !hasEscapeMoves();
     }
+
     //to determine if player has escape move during check
     protected boolean hasEscapeMoves() {
         //loop through all legal moves, perform them on "imaginary" board
@@ -97,7 +99,7 @@ public abstract class Player {
     public MoveTransition makeMove(final Move move){
         //if move isn't legal, don't need to transition to new board
         if (!isMoveLegal(move)){
-            return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+            return new MoveTransition(this.board, this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
         //else new board is made (since we defined board as immutable), and move is executed
         //NOTE: this now switches current player!!
@@ -110,12 +112,15 @@ public abstract class Player {
         //if there is a valid move on king, cannot execute move b/c leaves player in check
         //thus return same board instead of returning transition board
         if(!kingAttacks.isEmpty()){
-            return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+            return new MoveTransition(this.board, this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
         //if no valid king attacks, move is valid so return transition board
-        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+        return new MoveTransition(this.board, transitionBoard, move, MoveStatus.DONE);
     }
 
+    public MoveTransition unMakeMove(final Move move) {
+        return new MoveTransition(this.board, move.undo(), move, MoveStatus.DONE);
+    }
 
     //abstract getter methods to be implemented in subclasses
     public abstract Collection<Piece> getActivePieces();

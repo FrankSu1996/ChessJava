@@ -44,8 +44,8 @@ public class MiniMax implements MoveStrategy {
                 /*check alliance of next moves player. Use max/min functions accordingly
                 NOTE: White by convention is maximizing player, Black is minimizing.*/
                 currentValue = board.currentPlayer().getAlliance().isWhite() ?
-                        min(moveTransition.getTransitionBoard(), this.searchDepth - 1, alpha, beta) :
-                        max(moveTransition.getTransitionBoard(), this.searchDepth - 1, alpha, beta);
+                        min(moveTransition.getToBoard(), this.searchDepth - 1, alpha, beta) :
+                        max(moveTransition.getToBoard(), this.searchDepth - 1, alpha, beta);
 
                 // if current player is white, return highest value
                 if(board.currentPlayer().getAlliance().isWhite() && currentValue >= highestValue) {
@@ -79,7 +79,7 @@ public class MiniMax implements MoveStrategy {
         for(final Move move : board.currentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if(moveTransition.getMoveStatus().isDone()) {
-                final int currentValue = max(moveTransition.getTransitionBoard(), depth - 1, alpha, beta);
+                final int currentValue = max(moveTransition.getToBoard(), depth - 1, alpha, beta);
                 lowest = Math.min(lowest, currentValue);
                 beta = Math.min(beta, currentValue);
 
@@ -106,7 +106,7 @@ public class MiniMax implements MoveStrategy {
         for(final Move move : board.currentPlayer().getLegalMoves()) {
             final MoveTransition moveTransition = board.currentPlayer().makeMove(move);
             if(moveTransition.getMoveStatus().isDone()) {
-                final int currentValue = min(moveTransition.getTransitionBoard(),depth - 1, alpha, beta);
+                final int currentValue = min(moveTransition.getToBoard(),depth - 1, alpha, beta);
                 highest = Math.max(highest, currentValue);
                 alpha = Math.max(alpha, currentValue);
 

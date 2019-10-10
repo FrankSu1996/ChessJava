@@ -104,6 +104,13 @@ public abstract class Move {
         return builder.build();
     }
 
+    public Board undo() {
+        final Board.Builder builder = new Builder();
+        this.board.getAllPieces().stream().forEach(builder::setPiece);
+        builder.setMoveMaker(this.board.currentPlayer().getAlliance());
+        return builder.build();
+    }
+
     // major pieces executing attack move
     public static class MajorAttackMove extends AttackMove {
 
