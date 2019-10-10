@@ -42,6 +42,7 @@ public class Table extends Observable {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
+    private Move computerMove;
     private boolean highlightLegalMoves;
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(1000, 650);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
@@ -82,6 +83,17 @@ public class Table extends Observable {
         return INSTANCE;
     }
 
+    public void show() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Table.get().getMoveLog().clear();
+                Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
+                Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
+            }
+        });
+    }
+
     private Board getGameBoard() {
         return this.chessBoard;
     }
@@ -95,6 +107,7 @@ public class Table extends Observable {
         final JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
+        tableMenuBar.add(createOptionsMenu());
         return tableMenuBar;
     }
 
@@ -261,12 +274,8 @@ public class Table extends Observable {
         return this.takenPiecesPanel;
     }
 
-    private BoardPanel getBoardPanel() {
-        return this.boardPanel;
-    }
-
     private void moveMadeUpdate(final PlayerType playerType) {
-        
+
     }
 
     // use swingworker to perform AI tasks in background thread so main GUI is still responsive
@@ -293,9 +302,9 @@ public class Table extends Observable {
                 Table.get().updateComputerMove(bestMove);
                 Table.get().updateGameBoard(Table.get().getGameBoard().currentPlayer().makeMove(bestMove).getTransitionBoard());
                 Table.get().getMoveLog().addMove(bestMove);
-                Table.get().getGameHistoryPanel().redo(...);
-                Table.get().getTakenPiecesPanel().redo(...);
-                Table.get().getBoardPanel().drawBoard(...);
+                Table.get().getGameHistoryPanel().redo(Table.get().getGameBoard(), Table.get().getMoveLog());
+                Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
+                Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
                 Table.get().moveMadeUpdate(PlayerType.COMPUTER);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -418,9 +427,14 @@ public class Table extends Observable {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                boardPanel.drawBoard(chessBoard);
                                 gameHistoryPanel.redo(chessBoard, moveLog);
                                 takenPiecesPanel.redo(moveLog);
+
+                                //if AI is current player, notify when HUMAN has made a move
+                                if(gameSetup.isAIPlayer(chessBoard.currentPlayer())) {
+                                    Table.get().moveMadeUpdate(PlayerType.HUMAN);
+                                }
+                                boardPanel.drawBoard(chessBoard);
                             }
                         });
                     }
