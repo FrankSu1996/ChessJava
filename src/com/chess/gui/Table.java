@@ -63,7 +63,7 @@ public class Table extends Observable {
         this.moveLog = new MoveLog();
 
         //IMPORTANT: add AI as observer for the table
-        this.addObserver(new TableGameAIWatcher());
+        this.addObserver(new TableGameAIWatcher(4));
         this.gameSetup = new GameSetup(this.gameFrame, true);
 
         //creating menu bar
@@ -202,13 +202,19 @@ public class Table extends Observable {
     // class representing observer for table
     private static class TableGameAIWatcher implements Observer {
 
+        int searchDepth;
+
+        private TableGameAIWatcher(int searchDepth) {
+            this.searchDepth = searchDepth;
+        }
+
         @Override
         public void update(final Observable observable, final Object o) {
             if(Table.get().getGameSetup().isAIPlayer(Table.get().getGameBoard().currentPlayer()) &&
                 !Table.get().getGameBoard().currentPlayer().isInCheckMate() &&
                 !Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
                 //create an AI thread and execute ai move
-                final AIThinkTank thinkTank = new AIThinkTank();
+                final AIThinkTank thinkTank = new AIThinkTank(this.searchDepth);
                 thinkTank.execute();
             }
             if (Table.get().getGameBoard().currentPlayer().isInCheckMate()) {
@@ -305,14 +311,16 @@ public class Table extends Observable {
     // use swingworker to perform AI tasks in background thread so main GUI is still responsive
     private static class AIThinkTank extends SwingWorker<Move, String> {
 
-        private AIThinkTank() {
+        private int searchDepth;
 
+        private AIThinkTank(int searchDepth) {
+            this.searchDepth = searchDepth;
         }
 
         @Override
         protected Move doInBackground() throws Exception {
             //invoke minimax algorithm to calculate best move option
-            final MoveStrategy miniMax = new MiniMax(4);
+            final MoveStrategy miniMax = new MiniMax(this.searchDepth);
             final Move bestMove = miniMax.execute(Table.get().getGameBoard());
             return bestMove;
         }
