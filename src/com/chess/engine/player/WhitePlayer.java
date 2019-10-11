@@ -2,6 +2,7 @@ package com.chess.engine.player;
 
 import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
+import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Piece;
@@ -45,24 +46,26 @@ public class WhitePlayer extends Player {
     protected Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
                                                     final Collection<Move> opponentsLegals) {
         final List<Move> kingCastles = new ArrayList<>();
+
         //for white player's kingside castle: if players king is in first move, and is NOT in check
-        if(this.playerKing.isFirstMove() && !this.isInCheck()){
+        if(this.playerKing.isFirstMove() && this.playerKing.getPiecePosition() == 60 && !this.isInCheck()){
             //for kingside check: if 2 tiles to the right are NOT occupied
             if(!this.board.getTile(61).isTileOccupied() &&
                     !this.board.getTile(62).isTileOccupied()){
+
                 final Tile rookTile = this.board.getTile(63);
+                final Piece kingSideRook = rookTile.getPiece();
+
                 //must also check if rook to the right is occupied and is first move to be
                 //legal castling move
-                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()){
+                if(kingSideRook != null && kingSideRook.isFirstMove()){
                     if(Player.calculateAttacksOnTile(61, opponentsLegals).isEmpty() &&
                             Player.calculateAttacksOnTile(62, opponentsLegals).isEmpty() &&
-                            rookTile.getPiece().getPieceType().isRook()) {
-                            kingCastles.add(new KingSideCastleMove(this.board,
-                                                                        this.playerKing,
-                                                                        62,
-                                                                        (Rook)rookTile.getPiece(),
-                                                                        rookTile.getTileCoordinate(),
-                                                                        61));
+                            kingSideRook.getPieceType().isRook()) {
+
+                        if(!BoardUtils.isKingPawnTrap(this.board, this.playerKing, 52)) {
+                            kingCastles.add(new KingSideCastleMove(this.board, this.playerKing, 62, (Rook) kingSideRook, kingSideRook.getPiecePosition(), 61));
+                        }
                     }
                 }
             }
@@ -70,18 +73,19 @@ public class WhitePlayer extends Player {
             if(!this.board.getTile(59).isTileOccupied() &&
                     !this.board.getTile(58).isTileOccupied() &&
                     !this.board.getTile(57).isTileOccupied()){
+
+                //get piece from rooktile
                 final Tile rookTile = this.board.getTile(56);
-                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove() &&
+                final Piece queenSideRook = rookTile.getPiece();
+
+                if(queenSideRook != null && queenSideRook.isFirstMove() &&
                     Player.calculateAttacksOnTile(58, opponentsLegals).isEmpty() &&
                     Player.calculateAttacksOnTile(59, opponentsLegals).isEmpty() &&
-                    rookTile.getPiece().getPieceType().isRook()){
-                    //todo add castle move
-                    kingCastles.add(new QueenSideCastleMove(this.board,
-                                                            this.playerKing,
-                                                            58,
-                                                            (Rook)rookTile.getPiece(),
-                                                            rookTile.getTileCoordinate(),
-                                                            59));
+                    queenSideRook.getPieceType().isRook()){
+
+                    if(!BoardUtils.isKingPawnTrap(this.board, this.playerKing, 52)) {
+                        kingCastles.add(new QueenSideCastleMove(this.board, this.playerKing, 58, (Rook) queenSideRook, queenSideRook.getPiecePosition(), 59));
+                    }
                     }
                 }
             }

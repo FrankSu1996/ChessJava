@@ -11,6 +11,10 @@ public enum PieceType {
         public boolean isRook(){
             return false;
         }
+        @Override
+        public boolean isPawn() {
+            return true;
+        }
     },
     KNIGHT("N", 300) {
         @Override
@@ -19,6 +23,10 @@ public enum PieceType {
         }
         @Override
         public boolean isRook(){
+            return false;
+        }
+        @Override
+        public boolean isPawn() {
             return false;
         }
     },
@@ -31,6 +39,10 @@ public enum PieceType {
         public boolean isRook(){
             return false;
         }
+        @Override
+        public boolean isPawn() {
+            return false;
+        }
     },
     ROOK("R", 500) {
         @Override
@@ -40,6 +52,10 @@ public enum PieceType {
         @Override
         public boolean isRook(){
             return true;
+        }
+        @Override
+        public boolean isPawn() {
+            return false;
         }
     },
     QUEEN("Q", 900) {
@@ -51,6 +67,10 @@ public enum PieceType {
         public boolean isRook(){
             return false;
         }
+        @Override
+        public boolean isPawn() {
+            return false;
+        }
     },
     KING("K", 10000) {
         @Override
@@ -59,6 +79,10 @@ public enum PieceType {
         }
         @Override
         public boolean isRook(){
+            return false;
+        }
+        @Override
+        public boolean isPawn() {
             return false;
         }
     };
@@ -83,4 +107,6 @@ public enum PieceType {
     public abstract boolean isKing();
 
     public abstract boolean isRook();
+
+    public abstract boolean isPawn();
 }

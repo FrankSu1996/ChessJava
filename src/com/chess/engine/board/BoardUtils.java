@@ -1,5 +1,7 @@
 package com.chess.engine.board;
 
+import com.chess.engine.pieces.King;
+import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.*;
@@ -89,5 +91,12 @@ public class BoardUtils {
 
     public static String getPositionAtCoordinate(final int coordinate) {
         return ALGEBRAIC_NOTATION[coordinate];
+    }
+
+    public static boolean isKingPawnTrap(final Board board, final King king, final int frontTile) {
+        final Tile tile = board.getTile(frontTile);
+        final Piece piece = tile.getPiece();
+
+        return piece != null && piece.getPieceType().isPawn() && piece.getPieceAlliance() != king.getPieceAlliance();
     }
 }
