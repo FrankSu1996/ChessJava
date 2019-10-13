@@ -9,7 +9,7 @@ Read more about the Minimax Algorithm [Here:](https://www.kaggle.com/uciml/red-w
 To play the game, either downlaod the executable jar file "ChessJava.jar" in the "out/artifacts/" directory, or clone the project
 and run src/com/chess/JChess.java. Upon loading, you will see the chess board gui as the following:
 
-![alt text](https://github.com/FrankSu1996/ChessJava/blob/master/src/images)
+![alt text](https://github.com/FrankSu1996/ChessJava/tree/master/src/images)
 
 By default, the game engine is setup for two human players. Under the options menu, there is an option to turn on highlighting of legal moves, which is strongly recommended. To move a piece, simply click on a piece icon. If legal moves highlighting is selected, it should look like the following:
 
