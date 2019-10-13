@@ -18,14 +18,44 @@ public class King extends Piece{
     //list of possible offsets
     private final static int[] CANDIDATE_MOVE_COORDINATE = {-9, -8, -7, -1, 1, 7, 8, 9};
 
+    private final boolean isCastled;
+    private final boolean kingSideCastleCapable;
+    private final boolean queenSideCastleCapable;
+
     //"convenience constructor", dummy true value for first move
-    public King(final Alliance pieceAlliance, final int piecePosition) {
+    public King(final Alliance pieceAlliance,
+                final int piecePosition,
+                final boolean kingSideCastleCapable,
+                final boolean queenSideCastleCapable) {
         super(PieceType.KING, piecePosition, pieceAlliance, true);
+        this.isCastled = false;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
     }
 
     //constructor that takes in actual isFirstMove argument
-    public King(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
+    public King(final Alliance pieceAlliance,
+                final int piecePosition,
+                final boolean isFirstMove,
+                final boolean isCastled,
+                final boolean kingSideCastleCapable,
+                final boolean queenSideCastleCapable) {
         super(PieceType.KING, piecePosition, pieceAlliance, isFirstMove);
+        this.isCastled = isCastled;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
+    }
+
+    public boolean isCastled() {
+        return this.isCastled;
+    }
+
+    public boolean isKingSideCastleCapable() {
+        return this.kingSideCastleCapable;
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.queenSideCastleCapable;
     }
 
     @Override
@@ -62,10 +92,12 @@ public class King extends Piece{
         return ImmutableList.copyOf(legalMoves);
     }
 
-    //create new king with updated piece position
+    //create new king with updated piece position. Once moved, castle capable is false
     @Override
     public King movePiece(final Move move) {
-        return new King(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+        return new King(move.getMovedPiece().getPieceAlliance(),
+                        move.getDestinationCoordinate(), false,
+                        move.isCastlingMove(), false, false);
     }
 
     //toString invokes toString from PieceType enum in Piece class

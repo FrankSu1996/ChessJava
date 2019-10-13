@@ -92,6 +92,15 @@ public abstract class Player {
     public boolean isInStaleMate(){
         return !this.isInCheck && !hasEscapeMoves();
     }
+
+    public boolean isKingSideCastleCapable() {
+        return this.playerKing.isKingSideCastleCapable();
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.playerKing.isQueenSideCastleCapable();
+    }
+
     public boolean isCastled(){
         return false;
     }

@@ -106,36 +106,9 @@ public class Table extends Observable {
     //method to create a menu bar
     private JMenuBar createTableMenuBar(){
         final JMenuBar tableMenuBar = new JMenuBar();
-        tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
         tableMenuBar.add(createOptionsMenu());
         return tableMenuBar;
-    }
-
-    private JMenu createFileMenu() {
-        final JMenu fileMenu = new JMenu("File");
-
-        //menu option to load PGN files
-        final JMenuItem openPGN = new JMenuItem("Load PGN File");
-        openPGN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("open up that pgn file!");
-            }
-        });
-        fileMenu.add(openPGN);
-
-        //create exit option
-        final JMenuItem exitMenuItem = new JMenuItem("Exit");
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        fileMenu.add(exitMenuItem);
-
-        return fileMenu;
     }
 
     // Preferences menu.
