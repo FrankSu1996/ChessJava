@@ -16,3 +16,7 @@ By default, the game engine is setup for two human players. Under the options me
 ![alt text](https://github.com/FrankSu1996/ChessJava/tree/master/src/images/move.png)
 
 If you wish to cancel your move selection, simply click on the piece icon again to reset your move option. To proceed with a move, simply click on a valid move tile to finish your turn.
+
+On the right hand of the board, there is a panel that will keep track of all the moves made during the game in standard PGN notation, and on the left hand side there is a panel that will show all of the taken pieces throughout the game. 
+
+Finally, to set up the AI Computer, click on options -> Setup Game. This will bring up a window where you can select which player is human and which player is computer. Have Fun!!
