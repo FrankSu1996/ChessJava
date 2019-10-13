@@ -46,7 +46,7 @@ public class Table extends Observable {
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(1000, 650);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
-    private static String defaultPieceImagesPath = "art/pieces/plain/";
+    private static String defaultPieceImagesPath = "/art/pieces/plain/";
 
     //colors for tiles
     private final Color lightTileColor = Color.decode("#FFFACD");
@@ -61,7 +61,6 @@ public class Table extends Observable {
         this.gameHistoryPanel = new GameHistoryPanel();
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.moveLog = new MoveLog();
-
         //IMPORTANT: add AI as observer for the table
         this.addObserver(new TableGameAIWatcher(4));
         this.gameSetup = new GameSetup(this.gameFrame, true);
@@ -524,7 +523,7 @@ public class Table extends Observable {
             if (board.getTile(this.tileId).isTileOccupied()) {
                 try {
                     // example: WHITE, bishop = "WB.gif"
-                    final BufferedImage image = read(new File(defaultPieceImagesPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0, 1) +
+                    final BufferedImage image = read(Table.class.getResource(defaultPieceImagesPath + board.getTile(this.tileId).getPiece().getPieceAlliance().toString().substring(0, 1) +
                             board.getTile(this.tileId).getPiece().toString() + ".gif"));
                     add (new JLabel(new ImageIcon(image)));
                 } catch (IOException e)
@@ -541,7 +540,7 @@ public class Table extends Observable {
                 for (final Move move : pieceLegalMoves(board)) {
                     if(move.getDestinationCoordinate() == this.tileId) {
                         try {
-                            add(new JLabel(new ImageIcon(ImageIO.read(new File("art/misc/green_dot.png")))));
+                            add(new JLabel(new ImageIcon(ImageIO.read(Table.class.getResource("/art/misc/green_dot.png")))));
                         } catch(Exception e) {
                             e.printStackTrace();
                         }
